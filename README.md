@@ -8,6 +8,7 @@
 
 This plugin allows you to generate a token for a stack of item, for retrieval at a later time.
 
+# Commands
 | Command | Permission | Arguments | Description
 | --- | --- | --- | --- |
 | `/itemtoken help` | N/A | N/A | Prints the ItemToken help. |
