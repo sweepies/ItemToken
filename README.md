@@ -16,8 +16,8 @@ This plugin allows you to generate a token for a stack of item, for retrieval at
 | `/itemtoken get` (alias: /it g) | itemtoken.get | token | Retrieve items from a token. |
 
 # Downloading
-You can download the latest build from [Jenkins](https://ci.amberfall.science/job/ItemToken/).
-
+~~~You can download the latest build from [Jenkins](https://ci.amberfall.science/job/ItemToken/).~~~
+Jenkins is currently broken due to a bug, please download from the [SpigotMC resource page]()
 # Building
 1. Install [Apache Maven](https://maven.apache.org/).
 2. Clone this repository.
