@@ -10,9 +10,9 @@ This plugin allows you to generate a token for a stack of item, for retrieval at
 
 | Command | Permission | Arguments | Description
 | --- | --- | --- | --- |
-| `/itemtoken help | N/A | N/A | Prints the ItemToken help. |
+| `/itemtoken help` | N/A | N/A | Prints the ItemToken help. |
 | `/itemtoken create` (alias: /it c) | item, token, amount | itemtoken.create | Create a token. |
-| `/itemtoken get` (alias: /it g) | itemtoken.get | Retrieve items from a token. |
+| `/itemtoken get` (alias: /it g) | itemtoken.get | token | Retrieve items from a token. |
 
 # Downloading
 You can download the latest build from [Jenkins](https://ci.amberfall.science/job/ItemToken/).
