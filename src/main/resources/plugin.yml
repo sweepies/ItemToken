@@ -1,0 +1,35 @@
+name: ItemToken
+version: ${project.version}
+main: science.amberfall.itemtoken.ItemToken
+prefix: ItemToken
+authors: [Sweepyoface]
+description: Generate tokens for items
+website: https://sweepy.pw/
+depend: [Essentials]
+
+commands:
+  itemtoken:
+    description: ItemToken parent command
+    usage: /itemtoken
+    permission: itemtoken.help
+    aliases: [it]
+  itemtoken create:
+    description: Create a token for a stack of items.
+    usage: /itemtoken create <item> <token> <amount>
+    permission: itemtoken.create
+    aliases: ["itemtoken c"]
+  itemtoken get:
+    description: Get the stack of items from a token.
+    usage: /itemtoken get <token>
+    aliases: ["itemtoken g"]
+
+permissions:
+  itemtoken.help:
+    description: See the ItemToken help.
+    default: true
+  itemtoken.create:
+    description: Create a token for a stack of items.
+    default: op
+  itemtoken.get:
+    description: Get the stack of items from a token.
+    default: true
