@@ -67,6 +67,10 @@
             <id>essentials-repo</id>
             <url>http://repo.ess3.net/content/groups/essentials/</url>
         </repository>
+        <repository>
+            <id>Aikar</id>
+            <url>http://ci.emc.gs/nexus/content/groups/aikar/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -75,6 +79,11 @@
             <artifactId>paper-api</artifactId>
             <version>1.11.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>co.aikar</groupId>
+            <artifactId>taskchain-bukkit</artifactId>
+            <version>3.6.0</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
         <dependency>
