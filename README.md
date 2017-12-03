@@ -16,10 +16,9 @@ This plugin allows you to generate a token for a stack of item, for retrieval at
 | `/itemtoken get` (alias: /it g) | itemtoken.get | token | Retrieve items from a token. |
 
 # Downloading
-~~~You can download the latest build from [Jenkins](https://ci.sweepy.pw/job/ItemToken/).~~~
-Jenkins is currently broken due to a bug, please download from the [SpigotMC resource page]()
-# Building
+You can download the latest build from [Jenkins](https://ci.sweepy.pw/job/ItemToken/).
+# Compiling from source
 1. Install [Apache Maven](https://maven.apache.org/).
 2. Clone this repository.
-3. Run `mvn clean install`.
+3. Run `mvn clean package`.
 4. The compiled jar will be in the `target` directory.
