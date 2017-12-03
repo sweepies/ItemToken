@@ -25,7 +25,7 @@ public final class ItemToken extends JavaPlugin implements Listener {
 
     private static Essentials ess;
     private static TaskChainFactory taskChainFactory;
-    private final File dataDir = new File(getDataFolder() + "/data/");
+    private File dataDir = new File(getDataFolder() + "/data");
 
     @Override
     public void onEnable() {
@@ -41,7 +41,7 @@ public final class ItemToken extends JavaPlugin implements Listener {
         }
 
         if (!dataDir.exists()) {
-            if (!dataDir.mkdir()) {
+            if (!dataDir.mkdirs()) {
                 getLogger().severe("Unable to create data directory.");
                 disableMe();
             }
@@ -108,7 +108,7 @@ public final class ItemToken extends JavaPlugin implements Listener {
                                             }
 
                                             // Format filename as 'token.json
-                                            String fileName = md5(String.format("%s.json", md5(token.getBytes())).getBytes());
+                                            String fileName = md5(token.getBytes()) + ".json";
                                             File file = new File(getDataFolder() + "/data/" + fileName);
 
                                             if (file.exists()) {
@@ -125,7 +125,7 @@ public final class ItemToken extends JavaPlugin implements Listener {
                                             data.put("item", item);
                                             data.put("amount", amount.toString());
                                             data.put("token", token);
-                                            data.put("timestamp", System.currentTimeMillis());
+                                            data.put("timestamp", (int) System.currentTimeMillis());
                                             data.put("createdBy", createdBy);
                                             data.put("used", false);
 
@@ -167,7 +167,7 @@ public final class ItemToken extends JavaPlugin implements Listener {
                                 taskChainFactory.newChain().asyncFirst(() -> {
 
                                     // Format filename as 'token.json
-                                    String fileName = md5(String.format("%s.json", md5(token.getBytes())).getBytes());
+                                    String fileName = md5(token.getBytes()) + ".json";
                                     File file = new File(getDataFolder() + "/data/" + fileName);
 
                                     if (!file.exists()) {
