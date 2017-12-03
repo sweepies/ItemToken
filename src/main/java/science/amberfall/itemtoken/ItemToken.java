@@ -82,11 +82,11 @@ public final class ItemToken extends JavaPlugin implements Listener {
                         if (sender.hasPermission("itemtoken.create")) {
                             if (args.length >= 2) {
 
-                                String item = args[1];
+                                String token = args[1];
 
                                 if (args.length >= 3) {
 
-                                    String token = args[2];
+                                    String item = args[2];
 
                                     if (args.length >= 4) {
 
@@ -125,7 +125,7 @@ public final class ItemToken extends JavaPlugin implements Listener {
                                             data.put("item", item);
                                             data.put("amount", amount.toString());
                                             data.put("token", token);
-                                            data.put("timestamp", (int) System.currentTimeMillis());
+                                            data.put("createdAt", (int) System.currentTimeMillis());
                                             data.put("createdBy", createdBy);
                                             data.put("used", false);
 
@@ -144,15 +144,15 @@ public final class ItemToken extends JavaPlugin implements Listener {
                                         }).execute();
                                         return true;
                                     } else {
-                                        sender.sendMessage(ChatColor.RED + "Missing argument. Usage: /itemtoken create <item> <token> <amount>");
+                                        sender.sendMessage(ChatColor.RED + "Missing argument. Usage: /itemtoken create <token> <item> <amount>");
                                         return true;
                                     }
                                 } else {
-                                    sender.sendMessage(ChatColor.RED + "Missing argument. Usage: /itemtoken create <item> <token> <amount>");
+                                    sender.sendMessage(ChatColor.RED + "Missing argument. Usage: /itemtoken create <token> <item> <amount>");
                                     return true;
                                 }
                             } else {
-                                sender.sendMessage(ChatColor.RED + "Missing argument. Usage: /itemtoken create <item> <token> <amount>");
+                                sender.sendMessage(ChatColor.RED + "Missing argument. Usage: /itemtoken create <token> <item> <amount>");
                                 return true;
                             }
                         } else {
@@ -202,9 +202,18 @@ public final class ItemToken extends JavaPlugin implements Listener {
                                         data.put("item", tokenData.getItem());
                                         data.put("amount", tokenData.getAmount());
                                         data.put("token", tokenData.getToken());
-                                        data.put("timestamp", tokenData.getTimestamp());
+                                        data.put("createdAt", tokenData.getCreatedAt());
                                         data.put("createdBy", tokenData.getCreatedBy());
                                         data.put("used", true);
+                                        data.put("usedAt", (int) System.currentTimeMillis());
+
+                                        HashMap<String, Object> usedBy = new HashMap<>();
+
+                                        usedBy.put("userName", player.getName());
+                                        usedBy.put("uuid", player.getUniqueId().toString());
+                                        usedBy.put("ipAddr", player.getAddress().getHostString());
+
+                                        data.put("usedBy", usedBy);
 
                                         Gson gsonOut = new GsonBuilder().setPrettyPrinting().create();
                                         String jsonOut = gsonOut.toJson(data);
@@ -234,7 +243,7 @@ public final class ItemToken extends JavaPlugin implements Listener {
                         }
                     } else {
                         sender.sendMessage(ChatColor.YELLOW + " ---- " + ChatColor.GOLD + "ItemToken Help" + ChatColor.YELLOW + " -- " + ChatColor.GOLD + "Page " + ChatColor.RED + "1" + ChatColor.GOLD + "/" + ChatColor.RED + "1" + ChatColor.YELLOW + " ----");
-                        sender.sendMessage(ChatColor.GOLD + "/itemtoken create <item> <token> <amount>" + ChatColor.WHITE + ": Create a token for a stack of items.");
+                        sender.sendMessage(ChatColor.GOLD + "/itemtoken create <token> <item> <amount>" + ChatColor.WHITE + ": Create a token for a stack of items.");
                         sender.sendMessage(ChatColor.GOLD + "/itemtoken get <token>" + ChatColor.WHITE + ": Get the stack of items from a token.");
                     }
                 } else {

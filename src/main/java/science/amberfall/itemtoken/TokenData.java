@@ -6,16 +6,18 @@ public class TokenData {
     public String item;
     public String amount;
     public String token;
-    public int timestamp;
+    public int createdAt;
     public HashMap<String, Object> createdBy;
     public boolean used;
+    public int usedAt;
+    public HashMap<String, Object> usedBy;
 
     public String getToken() {
         return token;
     }
 
-    public int getTimestamp() {
-        return timestamp;
+    public int getCreatedAt() {
+        return createdAt;
     }
 
     public HashMap<String, Object> getCreatedBy() {
@@ -26,6 +28,13 @@ public class TokenData {
         return used;
     }
 
+    public int getUsedAt() {
+        return usedAt;
+    }
+
+    public HashMap<String, Object> getUsedByBy() {
+        return usedBy;
+    }
 
     public String getItem() {
         return item;
