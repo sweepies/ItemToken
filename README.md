@@ -12,7 +12,7 @@ This plugin allows you to generate a token for a stack of item, for retrieval at
 | Command | Permission | Arguments | Description
 | --- | --- | --- | --- |
 | `/itemtoken help` | N/A | N/A | Prints the ItemToken help. |
-| `/itemtoken create` (alias: /it c) | itemtoken.create | item, token, amount | Create a token. |
+| `/itemtoken create` (alias: /it c) | itemtoken.create | token, item, amount | Create a token. |
 | `/itemtoken get` (alias: /it g) | itemtoken.get | token | Retrieve items from a token. |
 
 # Downloading
