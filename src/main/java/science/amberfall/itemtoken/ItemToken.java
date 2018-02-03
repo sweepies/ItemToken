@@ -20,6 +20,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Objects;
 
 public final class ItemToken extends JavaPlugin implements Listener {
 
@@ -85,20 +86,17 @@ public final class ItemToken extends JavaPlugin implements Listener {
                                             try {
                                                 items = ess.getItemDb().get(item, amount);
                                             } catch (Exception e) {
-                                                sender.sendMessage(ChatColor.RED + "Item not found: " + item);
-                                                return true;
+                                                return ChatColor.RED + "Item not found: " + item;
                                             }
                                             if (items == null) {
-                                                sender.sendMessage(ChatColor.RED + "Item not found: " + item);
-                                                return true;
+                                                return ChatColor.RED + "Item not found: " + item;
                                             }
                                             // Format filename as 'token.json
                                             String fileName = md5(token.getBytes()) + ".json";
                                             File file = new File(getDataFolder() + "/data/" + fileName);
 
                                             if (file.exists()) {
-                                                sender.sendMessage(ChatColor.RED + "Specified token already exists.");
-                                                return false;
+                                                return ChatColor.RED + "Specified token already exists.";
                                             }
 
                                             HashMap<String, Object> data = new HashMap<>();
@@ -120,11 +118,11 @@ public final class ItemToken extends JavaPlugin implements Listener {
                                             try {
                                                 FileUtils.writeStringToFile(file, json, "UTF-8");
                                             } catch (IOException e) {
-                                                return false;
+                                                return ChatColor.RED + "There was an error processing your command.";
                                             }
-                                            sender.sendMessage(ChatColor.GOLD + "Token '" + token + "' created for item " + items.getType().name() + " x " + amount);
-                                            return true;
-                                        }).execute();
+                                            return ChatColor.GOLD + "Token '" + token + "' created for item " + items.getType().name() + " x " + amount;
+                                        }).syncLast(sender::sendMessage).execute();
+
                                         return true;
                                     } else {
                                         sender.sendMessage(ChatColor.RED + "Missing argument. Usage: /itemtoken create <token> <item> <amount>");
@@ -152,8 +150,7 @@ public final class ItemToken extends JavaPlugin implements Listener {
                                     File file = new File(getDataFolder() + "/data/" + fileName);
 
                                     if (!file.exists()) {
-                                        sender.sendMessage(ChatColor.RED + "Invalid token: " + token);
-                                        return false;
+                                        return ChatColor.RED + "Invalid token: " + token;
                                     }
 
                                     String jsonIn;
@@ -161,19 +158,18 @@ public final class ItemToken extends JavaPlugin implements Listener {
                                     try {
                                         jsonIn = FileUtils.readFileToString(file, "UTF-8");
                                     } catch (IOException e) {
-                                        return false;
+                                        return ChatColor.RED + "There was an error processing your command.";
                                     }
 
                                     Gson gsonIn = new Gson();
                                     TokenData tokenData = gsonIn.fromJson(jsonIn, TokenData.class);
-                                    ItemStack items = null;
+                                    ItemStack items;
 
                                     if (!tokenData.isUsed()) {
                                         try {
                                             items = ess.getItemDb().get(tokenData.getItem(), Integer.parseInt(tokenData.getAmount()));
                                         } catch (Exception e) {
-                                            sender.sendMessage(ChatColor.RED + "Item not found: " + tokenData.getItem());
-                                            return false;
+                                            return ChatColor.RED + "Item not found: " + tokenData.getItem();
                                         }
 
                                         HashMap<String, Object> data = new HashMap<>();
@@ -199,19 +195,13 @@ public final class ItemToken extends JavaPlugin implements Listener {
                                         try {
                                             FileUtils.writeStringToFile(file, jsonOut, "UTF-8");
                                         } catch (IOException e) {
-                                            return false;
+                                            return ChatColor.RED + "There was an error processing your command.";
                                         }
                                     } else {
-                                        sender.sendMessage(ChatColor.RED + "Invalid token: " + token);
+                                        return ChatColor.RED + "Invalid token: " + token;
                                     }
-                                    assert items != null;
-                                    sender.sendMessage(ChatColor.GOLD + "Received " + items.getType().name() + " x " + tokenData.getAmount());
-                                    return items;
-                                }).syncLast((items) -> {
-                                    if (items != null) {
-                                        player.getInventory().addItem((ItemStack) items);
-                                    }
-                                }).execute();
+                                    return ChatColor.GOLD + "Received " + Objects.requireNonNull(items).getType().name() + " x " + tokenData.getAmount();
+                                }).syncLast(sender::sendMessage).execute();
                             } else {
                                 sender.sendMessage(ChatColor.RED + "Missing argument. Usage: /itemtoken get <token>");
                             }
@@ -231,6 +221,7 @@ public final class ItemToken extends JavaPlugin implements Listener {
                         sender.sendMessage(ChatColor.YELLOW + " ---- " + ChatColor.GOLD + "ItemToken Help" + ChatColor.YELLOW + " -- " + ChatColor.GOLD + "Page " + ChatColor.RED + "1" + ChatColor.GOLD + "/" + ChatColor.RED + "1" + ChatColor.YELLOW + " ----");
                         sender.sendMessage(ChatColor.GOLD + "/itemtoken create <token> <item> <amount>" + ChatColor.WHITE + ": Create a token for a stack of items.");
                         sender.sendMessage(ChatColor.GOLD + "/itemtoken get <token>" + ChatColor.WHITE + ": Get the stack of items from a token.");
+                        sender.sendMessage(ChatColor.GOLD + "/itemtoken version" + ChatColor.WHITE + ": Get the ItemToken version.");
                     }
                 } else {
                     sender.sendMessage(ChatColor.RED + "Unknown argument. See /itemtoken help for more info.");
