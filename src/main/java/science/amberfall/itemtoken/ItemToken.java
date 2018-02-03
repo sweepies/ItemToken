@@ -29,17 +29,13 @@ public final class ItemToken extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
-
         Bukkit.getServer().getPluginManager().registerEvents(this, this);
         if (Bukkit.getServer().getPluginManager().getPlugin("Essentials") != null) {
-
             ItemToken.ess = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
-
         } else {
             getLogger().severe("This plugin depends on Essentials to run, which was not found.");
             disableMe();
         }
-
         if (!dataDir.exists()) {
             if (!dataDir.mkdirs()) {
                 getLogger().severe("Unable to create data directory.");
@@ -48,10 +44,6 @@ public final class ItemToken extends JavaPlugin implements Listener {
         }
 
         taskChainFactory = BukkitTaskChainFactory.create(this);
-    }
-
-    @Override
-    public void onDisable() {
     }
 
     // Print a message and disable the plugin
@@ -73,7 +65,6 @@ public final class ItemToken extends JavaPlugin implements Listener {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!(sender instanceof ConsoleCommandSender)) {
-
             Player player = (Player) sender;
 
             if (label.toLowerCase().matches("(itemtoken|it)")) {
@@ -81,17 +72,13 @@ public final class ItemToken extends JavaPlugin implements Listener {
                     if (args[0].toLowerCase().matches("(create|c)")) {
                         if (sender.hasPermission("itemtoken.create")) {
                             if (args.length >= 2) {
-
                                 String token = args[1];
 
                                 if (args.length >= 3) {
-
                                     String item = args[2];
 
                                     if (args.length >= 4) {
-
                                         taskChainFactory.newChain().asyncFirst(() -> {
-
                                             Integer amount = Integer.parseInt(args[3]);
                                             ItemStack items;
 
@@ -101,12 +88,10 @@ public final class ItemToken extends JavaPlugin implements Listener {
                                                 sender.sendMessage(ChatColor.RED + "Item not found: " + item);
                                                 return true;
                                             }
-
                                             if (items == null) {
                                                 sender.sendMessage(ChatColor.RED + "Item not found: " + item);
                                                 return true;
                                             }
-
                                             // Format filename as 'token.json
                                             String fileName = md5(token.getBytes()) + ".json";
                                             File file = new File(getDataFolder() + "/data/" + fileName);
@@ -137,10 +122,8 @@ public final class ItemToken extends JavaPlugin implements Listener {
                                             } catch (IOException e) {
                                                 return false;
                                             }
-
                                             sender.sendMessage(ChatColor.GOLD + "Token '" + token + "' created for item " + items.getType().name() + " x " + amount);
                                             return true;
-
                                         }).execute();
                                         return true;
                                     } else {
@@ -161,11 +144,9 @@ public final class ItemToken extends JavaPlugin implements Listener {
                     } else if (args[0].toLowerCase().matches("(get|g)")) {
                         if (sender.hasPermission("itemtoken.get")) {
                             if (args.length >= 2) {
-
                                 String token = args[1];
 
                                 taskChainFactory.newChain().asyncFirst(() -> {
-
                                     // Format filename as 'token.json
                                     String fileName = md5(token.getBytes()) + ".json";
                                     File file = new File(getDataFolder() + "/data/" + fileName);
@@ -185,11 +166,9 @@ public final class ItemToken extends JavaPlugin implements Listener {
 
                                     Gson gsonIn = new Gson();
                                     TokenData tokenData = gsonIn.fromJson(jsonIn, TokenData.class);
-
                                     ItemStack items = null;
 
                                     if (!tokenData.isUsed()) {
-
                                         try {
                                             items = ess.getItemDb().get(tokenData.getItem(), Integer.parseInt(tokenData.getAmount()));
                                         } catch (Exception e) {
@@ -212,7 +191,6 @@ public final class ItemToken extends JavaPlugin implements Listener {
                                         usedBy.put("userName", player.getName());
                                         usedBy.put("uuid", player.getUniqueId().toString());
                                         usedBy.put("ipAddr", player.getAddress().getHostString());
-
                                         data.put("usedBy", usedBy);
 
                                         Gson gsonOut = new GsonBuilder().setPrettyPrinting().create();
@@ -226,7 +204,6 @@ public final class ItemToken extends JavaPlugin implements Listener {
                                     } else {
                                         sender.sendMessage(ChatColor.RED + "Invalid token: " + token);
                                     }
-
                                     assert items != null;
                                     sender.sendMessage(ChatColor.GOLD + "Received " + items.getType().name() + " x " + tokenData.getAmount());
                                     return items;
@@ -235,11 +212,20 @@ public final class ItemToken extends JavaPlugin implements Listener {
                                         player.getInventory().addItem((ItemStack) items);
                                     }
                                 }).execute();
-
-
                             } else {
                                 sender.sendMessage(ChatColor.RED + "Missing argument. Usage: /itemtoken get <token>");
                             }
+                        } else {
+                            sender.sendMessage(ChatColor.RED + "You do not have access to this command.");
+                            return true;
+                        }
+                    } else if (args[0].toLowerCase().matches("(version|ver)")) {
+                        if (sender.hasPermission("itemtoken.version")) {
+                            sender.sendMessage(ChatColor.GOLD + "Running version " + this.getDescription().getVersion());
+                            return true;
+                        } else {
+                            sender.sendMessage(ChatColor.RED + "You do not have access to this command.");
+                            return true;
                         }
                     } else {
                         sender.sendMessage(ChatColor.YELLOW + " ---- " + ChatColor.GOLD + "ItemToken Help" + ChatColor.YELLOW + " -- " + ChatColor.GOLD + "Page " + ChatColor.RED + "1" + ChatColor.GOLD + "/" + ChatColor.RED + "1" + ChatColor.YELLOW + " ----");
@@ -249,10 +235,9 @@ public final class ItemToken extends JavaPlugin implements Listener {
                 } else {
                     sender.sendMessage(ChatColor.RED + "Unknown argument. See /itemtoken help for more info.");
                 }
-
             }
         } else {
-            getLogger().warning("That command cannot be run by the console.");
+            getLogger().severe("That command cannot be run by the console.");
             return true;
         }
         return true;

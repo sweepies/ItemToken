@@ -3,14 +3,14 @@ package science.amberfall.itemtoken;
 import java.util.HashMap;
 
 public class TokenData {
-    public String item;
-    public String amount;
-    public String token;
-    public int createdAt;
-    public HashMap<String, Object> createdBy;
-    public boolean used;
-    public int usedAt;
-    public HashMap<String, Object> usedBy;
+    private String item;
+    private String amount;
+    private String token;
+    private int createdAt;
+    private HashMap<String, Object> createdBy;
+    private boolean used;
+    private int usedAt;
+    private HashMap<String, Object> usedBy;
 
     public String getToken() {
         return token;
