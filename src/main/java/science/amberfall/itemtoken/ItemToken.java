@@ -94,10 +94,7 @@ public final class ItemToken extends JavaPlugin implements Listener {
                                             // Format filename as 'token.json
                                             String fileName = md5(token.getBytes()) + ".json";
                                             File file = new File(getDataFolder() + "/data/" + fileName);
-
-                                            if (file.exists()) {
-                                                return ChatColor.RED + "Specified token already exists.";
-                                            }
+                                            final boolean fileExists = file.exists();
 
                                             HashMap<String, Object> data = new HashMap<>();
                                             HashMap<String, String> createdBy = new HashMap<>();
@@ -120,7 +117,10 @@ public final class ItemToken extends JavaPlugin implements Listener {
                                             } catch (IOException e) {
                                                 return ChatColor.RED + "There was an error processing your command.";
                                             }
-                                            return ChatColor.GOLD + "Token '" + token + "' created for item " + items.getType().name() + " x " + amount;
+
+                                            final String returnFormat = "Token %s %s for item %s x %s";
+
+                                            return ChatColor.GOLD + String.format(returnFormat, token, fileExists ? "overwritten" : "created", items.getType().name(), amount);
                                         }).syncLast(sender::sendMessage).execute();
 
                                         return true;
