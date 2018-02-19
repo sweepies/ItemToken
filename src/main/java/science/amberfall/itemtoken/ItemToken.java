@@ -171,6 +171,7 @@ public final class ItemToken extends JavaPlugin implements Listener {
                                         } catch (Exception e) {
                                             return ChatColor.RED + "Item not found: " + tokenData.getItem();
                                         }
+                                        assert items != null;
 
                                         HashMap<String, Object> data = new HashMap<>();
 
@@ -200,8 +201,18 @@ public final class ItemToken extends JavaPlugin implements Listener {
                                     } else {
                                         return ChatColor.RED + "Invalid token: " + token;
                                     }
-                                    return ChatColor.GOLD + "Received " + Objects.requireNonNull(items).getType().name() + " x " + tokenData.getAmount();
-                                }).syncLast(sender::sendMessage).execute();
+
+                                    final String message = ChatColor.GOLD + "Received " + items.getType().name() + " x " + tokenData.getAmount();
+
+                                    return new GetItemsReturnData(message, items);
+                                }).syncLast(returnData -> {
+                                    if (returnData instanceof GetItemsReturnData) {
+                                        player.getInventory().addItem(((GetItemsReturnData) returnData).getItems());
+                                        player.sendMessage(((GetItemsReturnData) returnData).getMessage());
+                                        return;
+                                    }
+                                    player.sendMessage((String) returnData);
+                                }).execute();
                             } else {
                                 sender.sendMessage(ChatColor.RED + "Missing argument. Usage: /itemtoken get <token>");
                             }
